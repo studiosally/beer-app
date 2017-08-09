@@ -5,66 +5,7 @@
     <meta charset="UTF-8">
     <title>BEERS APP</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <style type="text/css">
-        h1 {
-            font-size: 46px;
-            color: white;
-            margin-bottom: 50px;
-        }
-
-        body {
-            background: rgb(250, 203, 62);
-        }
-
-        .searchstyle {
-            height: 60px;
-            font-size: 26px;
-        }
-
-        .buttonstyle {
-            height: 60px;
-            width: 180px;
-            font-size: 22px;
-        }
-
-        .glyphicon-search {
-            font-size: 18px;
-        }
-
-        .container-background {
-            margin-top: 50px padding: 0;
-        }
-
-        .jumbotron {
-            padding: 0;
-            background: transparent;
-        }
-
-        .hidden {
-            display: none
-        }
-
-        .backgroundjumbotron {
-            background: #ff9800;
-            margin-top: 20px;
-            padding: 10px;
-            margin-bottom: 11px;
-            color: #763e21;
-        }
-
-        #beer-selection {
-            font-size: 20px
-        }
-
-        .backgroundjumbotron h2 {
-            display: inline;
-            font-size: 25px;
-        }
-
-        .beer-image-html{
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 
 <body>
@@ -112,63 +53,7 @@
         </div>
             </div>
             <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
-            <script type="text/javascript">
-                $('#search-beer-container button').on('click', function(e) {
-                    e.preventDefault();
-                    var beerName = $('#search-beer-container input').val()
-                    var urlSearchBeer = 'https://quiet-inlet-67115.herokuapp.com/api/search/all?q=' + beerName
-                    console.log(urlSearchBeer)
-                    $.ajax({
-                        url: urlSearchBeer,
-                        success: function(data) {
-                            var aBeerFound = data
-                            var optionTpl = '<option value="<%BEER_ID%>"><%BEER_NAME%></option>'
-                            // se agrega el mensaje disable selected para que no escoga la primera selección de los resultados en el option
-                            var beerOptionsHtml = '<option disabled selected>Select your beer </option>'
-                            console.log(aBeerFound)
-                            aBeerFound.forEach(function(oDataBeer) {
-                                var currentOption = optionTpl
-                                    .replace('<%BEER_NAME%>', oDataBeer.name)
-                                    .replace('<%BEER_ID%>', oDataBeer.id)
-                                beerOptionsHtml += currentOption
-                            })
-                            $('#beer-selection').html(beerOptionsHtml)
-                            $('#select-container').removeClass('hidden')
-                            $('.description-container').addClass('hidden')
-
-                        }
-                    })
-                })
-
-                $('#beer-selection').on('change', function() {
-                    var idBeer = $(this).val()
-                    var urlBeerDescription = 'https://quiet-inlet-67115.herokuapp.com/api/beer/' + idBeer
-                    console.log(urlBeerDescription)
-                    $.ajax({
-                        url: urlBeerDescription,
-                        success: function(data) {
-                            var aDescriptionFound = data.style.description
-                            var pDescription = '<p>' + aDescriptionFound + '</p>'
-                            if (data.labels) {
-                                var beerImage = data.labels.medium
-                            } else {
-                                $(errorimage).html('<p>Upss!!, no image has found</p>')
-                            }
-                            console.log(beerImage)
-                            //  console.log(aDescriptionFound) mirar si esta entrando a la api para mirar la info
-                            $('#beer-description').html(pDescription)
-                            $('.beer-image-html').attr('src', beerImage)
-                            $('.description-container').removeClass('hidden')
-                        }
-                    })
-
-                })
-
-
-
-
-                //https://quiet-inlet-67115.herokuapp.com/api/search/all?q=<%QUERY%>
-            </script>
+            <script src="js/app.js"></script>
 </body>
 
 </html>

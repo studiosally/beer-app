@@ -1,0 +1,58 @@
+h1 {
+            font-size: 46px;
+            color: white;
+            margin-bottom: 50px;
+        }
+
+        body {
+            background: rgb(250, 203, 62);
+        }
+
+        .searchstyle {
+            height: 60px;
+            font-size: 26px;
+        }
+
+        .buttonstyle {
+            height: 60px;
+            width: 180px;
+            font-size: 22px;
+        }
+
+        .glyphicon-search {
+            font-size: 18px;
+        }
+
+        .container-background {
+            margin-top: 50px padding: 0;
+        }
+
+        .jumbotron {
+            padding: 0;
+            background: transparent;
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .backgroundjumbotron {
+            background: #ff9800;
+            margin-top: 20px;
+            padding: 10px;
+            margin-bottom: 11px;
+            color: #763e21;
+        }
+
+        #beer-selection {
+            font-size: 20px
+        }
+
+        .backgroundjumbotron h2 {
+            display: inline;
+            font-size: 25px;
+        }
+
+        .beer-image-html{
+            align-items: center;
+        }
