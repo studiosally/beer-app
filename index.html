@@ -1,62 +1,174 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="beerApp">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Beer App</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script type="text/javascript" src="https://opensource.keycdn.com/angularjs/1.6.2/angular.min.js "></script>
-
+    <title>BEERS APP</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <style type="text/css">
-    	
+        h1 {
+            font-size: 46px;
+            color: white;
+            margin-bottom: 50px;
+        }
 
-    	.beer_description{
-    		
-    	}
-    	.show{
+        body {
+            background: rgb(250, 203, 62);
+        }
 
-    	}
+        .searchstyle {
+            height: 60px;
+            font-size: 26px;
+        }
 
+        .buttonstyle {
+            height: 60px;
+            width: 180px;
+            font-size: 22px;
+        }
+
+        .glyphicon-search {
+            font-size: 18px;
+        }
+
+        .container-background {
+            margin-top: 50px padding: 0;
+        }
+
+        .jumbotron {
+            padding: 0;
+            background: transparent;
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .backgroundjumbotron {
+            background: #ff9800;
+            margin-top: 20px;
+            padding: 10px;
+            margin-bottom: 11px;
+            color: #763e21;
+        }
+
+        #beer-selection {
+            font-size: 20px
+        }
+
+        .backgroundjumbotron h2 {
+            display: inline;
+            font-size: 25px;
+        }
+
+        .beer-image-html{
+            align-items: center;
+        }
     </style>
 </head>
 
 <body>
-    <div class="container" ng-controller='searchBeerController'>
-        {{2+2}}
-        <div class="col-md-8 col-md-offset-2 ">
-            <div class="row">
-                <form role="form" ng-submit="searchBeer($event)">
-                    <h1 class="text-center">SEARCH FOR YOUR FAVORITE BEER 🍻🍻</h1>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <input class="form-control" type="text" name="search" placeholder="Search" required ng-model="beerQuery" />
-                            <div class="input-group-btn">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                    <span>Search</span>
-                                </button>
-                            </div>
-                        </div>
+    <div class="container-background">
+        <div class="col-md-8 col-md-offset-2">
+            <!-- Search Form -->
+            <form role="form">
+                <!-- Search Field -->
+                <h1 class="text-left"> SEARCH FOR YOUR FAVORITE BEER 🍻🍻 </h1>
+                <div class="form-group">
+                    <div class="input-group " id="search-beer-container">
+                        <input value="" class="form-control searchstyle" type="text" name="search" placeholder="Search your beer" required/>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary buttonstyle" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i><span>Search</span></button>
+                        </span>
                     </div>
-                </form>
-                <div class="jumbotron">
-                    <select class="input-lg" ng-model="idbeersfound" ng-change="beerSelection()">
-                        <option ng-repeat="beer in beers" value="{{beer.id}}">{{ beer.name }}</option>
-                    </select>
                 </div>
-                <div class="jumbotron beer_description" ng-style="show"  >
-                    <h2>Beer Description</h2>
-                    <h3>{{name}}</h3>
-                    <p> {{description}}</p>
-                        <img ng-src="{{label}}">
+            </form>
+            <!-- End of Search Form -->
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <div id="select-container" class="jumbotron hidden ">
+                <div class="col-md-8 backgroundjumbotron">
+                    <h2>You got lucky, We Found some beers</h2>
                 </div>
-
+                <div class="col-md-4 backgroundjumbotron">
+                    <select id="beer-selection"></select>
+                </div>
             </div>
         </div>
-        <script type="text/javascript"></script>
-        <script src="js/app.js"></script>
-        <script src="js/searchBeerController.js"></script>
-        <script src="js/service.js"></script>
+        <div class="col-md-8 col-md-offset-2">
+
+            <div class="description-container jumbotron hidden">
+                <div class="col-md-8 backgroundjumbotron">
+                    <h2>Description to enjoy it</h2>
+                    <p id="beer-description"></p>
+                </div>
+                <div class="description-container jumbotron hidden">
+                    <div class="col-md-2 backgroundjumbotron">
+                        <img class="beer-image-html" src="#">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+            </div>
+            <script src="https://code.jquery.com/jquery-2.0.3.min.js"></script>
+            <script type="text/javascript">
+                $('#search-beer-container button').on('click', function(e) {
+                    e.preventDefault();
+                    var beerName = $('#search-beer-container input').val()
+                    var urlSearchBeer = 'https://quiet-inlet-67115.herokuapp.com/api/search/all?q=' + beerName
+                    console.log(urlSearchBeer)
+                    $.ajax({
+                        url: urlSearchBeer,
+                        success: function(data) {
+                            var aBeerFound = data
+                            var optionTpl = '<option value="<%BEER_ID%>"><%BEER_NAME%></option>'
+                            // se agrega el mensaje disable selected para que no escoga la primera selección de los resultados en el option
+                            var beerOptionsHtml = '<option disabled selected>Select your beer </option>'
+                            console.log(aBeerFound)
+                            aBeerFound.forEach(function(oDataBeer) {
+                                var currentOption = optionTpl
+                                    .replace('<%BEER_NAME%>', oDataBeer.name)
+                                    .replace('<%BEER_ID%>', oDataBeer.id)
+                                beerOptionsHtml += currentOption
+                            })
+                            $('#beer-selection').html(beerOptionsHtml)
+                            $('#select-container').removeClass('hidden')
+                            $('.description-container').addClass('hidden')
+
+                        }
+                    })
+                })
+
+                $('#beer-selection').on('change', function() {
+                    var idBeer = $(this).val()
+                    var urlBeerDescription = 'https://quiet-inlet-67115.herokuapp.com/api/beer/' + idBeer
+                    console.log(urlBeerDescription)
+                    $.ajax({
+                        url: urlBeerDescription,
+                        success: function(data) {
+                            var aDescriptionFound = data.style.description
+                            var pDescription = '<p>' + aDescriptionFound + '</p>'
+                            if (data.labels) {
+                                var beerImage = data.labels.medium
+                            } else {
+                                $(errorimage).html('<p>Upss!!, no image has found</p>')
+                            }
+                            console.log(beerImage)
+                            //  console.log(aDescriptionFound) mirar si esta entrando a la api para mirar la info
+                            $('#beer-description').html(pDescription)
+                            $('.beer-image-html').attr('src', beerImage)
+                            $('.description-container').removeClass('hidden')
+                        }
+                    })
+
+                })
+
+
+
+
+                //https://quiet-inlet-67115.herokuapp.com/api/search/all?q=<%QUERY%>
+            </script>
 </body>
 
 </html>
